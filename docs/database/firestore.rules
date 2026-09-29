@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function isDoctor() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Doctor';
+    }
+
+    match /users/{userId} {
+      allow create: if isSelf(userId);
+      allow read: if isSelf(userId) || isDoctor();
+      allow update: if isSelf(userId) || isDoctor();
+      allow delete: if isSelf(userId);
+    }
+
+    match /behavioral_data/{userId}/daily/{dayId} {
+      allow read, write: if isSelf(userId);
+      allow read: if isDoctor();
+    }
+
+    match /users/{userId}/connected_devices/{deviceId} {
+      allow read, write: if isSelf(userId);
+    }
+
+    match /risk_assessments/{userId}/daily/{dayId} {
+      allow read: if isSelf(userId) || isDoctor();
+      allow write: if isSelf(userId);
+    }
+
+    match /alerts/{alertId} {
+      allow read: if signedIn() &&
+        (resource.data.userId == request.auth.uid || isDoctor());
+      allow update: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /patient_therapist_links/{linkId} {
+      allow read: if signedIn() &&
+        (resource.data.patientId == request.auth.uid || resource.data.doctorId == request.auth.uid);
+      allow create: if signedIn() &&
+        (request.resource.data.patientId == request.auth.uid || request.resource.data.doctorId == request.auth.uid);
+      allow update: if signedIn() &&
+        (resource.data.patientId == request.auth.uid || resource.data.doctorId == request.auth.uid);
+    }
+
+    match /messages/{messageId} {
+      function acceptedLink() {
+        return exists(/databases/$(database)/documents/patient_therapist_links/$(resource.data.senderId)_$(resource.data.recipientId)) &&
+          get(/databases/$(database)/documents/patient_therapist_links/$(resource.data.senderId)_$(resource.data.recipientId)).data.status == 'accepted' ||
+          exists(/databases/$(database)/documents/patient_therapist_links/$(resource.data.recipientId)_$(resource.data.senderId)) &&
+          get(/databases/$(database)/documents/patient_therapist_links/$(resource.data.recipientId)_$(resource.data.senderId)).data.status == 'accepted';
+      }
+      allow read: if signedIn() && acceptedLink() &&
+        (resource.data.senderId == request.auth.uid || resource.data.recipientId == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.senderId == request.auth.uid;
+      allow update: if signedIn() && resource.data.recipientId == request.auth.uid;
+    }
+  }
+}

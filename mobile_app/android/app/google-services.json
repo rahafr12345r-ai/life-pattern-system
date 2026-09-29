@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1034333482013",
+    "project_id": "life-pattern-system-f72f8",
+    "storage_bucket": "life-pattern-system-f72f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034333482013:android:ba9f78ed73f80c60bdaaf4",
+        "android_client_info": {
+          "package_name": "com.lifepattern.life_pattern_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034333482013-67njra2ue5fg5ehgpsjttccichblvjko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo1y5IKbOjh2sTuL1MDDPY66Xos_h5gdc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034333482013-67njra2ue5fg5ehgpsjttccichblvjko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
