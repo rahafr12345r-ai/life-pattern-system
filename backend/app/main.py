@@ -29,7 +29,10 @@ def configuration_status() -> dict[str, bool]:
     """Report configuration presence without returning secret values."""
     return {
         "firebase_project_configured": bool(os.getenv("FIREBASE_PROJECT_ID")),
-        "firebase_credentials_configured": bool(os.getenv("GOOGLE_APPLICATION_CREDENTIALS")),
+        "firebase_credentials_configured": bool(
+            os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+            or os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
+        ),
         "analysis_key_configured": bool(os.getenv("ANALYSIS_INTERNAL_KEY")),
     }
 
