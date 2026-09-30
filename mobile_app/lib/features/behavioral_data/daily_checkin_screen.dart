@@ -17,6 +17,8 @@ class DailyCheckinScreen extends StatefulWidget {
 class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
   late final CheckinRepository _repository;
   final _notesController = TextEditingController();
+  final _sleepHoursController = TextEditingController(text: '7');
+  final _stepsController = TextEditingController(text: '6000');
   String _mood = 'Good';
   int _sleepQuality = 4;
   bool _saving = false;
@@ -31,6 +33,8 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
   @override
   void dispose() {
     _notesController.dispose();
+    _sleepHoursController.dispose();
+    _stepsController.dispose();
     super.dispose();
   }
 
@@ -45,6 +49,8 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
         mood: _mood,
         sleepQuality: _sleepQuality,
         notes: _notesController.text,
+        sleepHours: double.tryParse(_sleepHoursController.text) ?? 7,
+        activitySteps: int.tryParse(_stepsController.text) ?? 6000,
       );
       if (mounted) Navigator.of(context).pop();
     } catch (_) {
@@ -78,6 +84,14 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               const Text('Sleep quality', style: TextStyle(color: AppColors.text, fontSize: 17, fontWeight: FontWeight.w700)),
               const SizedBox(height: 10),
               Row(children: [for (var i = 1; i <= 5; i++) IconButton(onPressed: () => setState(() => _sleepQuality = i), icon: Icon(Icons.star, color: i <= _sleepQuality ? const Color(0xFFE36D28) : AppColors.border, size: 30))]),
+              const SizedBox(height: 20),
+              const Text('Sleep and movement', style: TextStyle(color: AppColors.text, fontSize: 17, fontWeight: FontWeight.w700)),
+              const SizedBox(height: 10),
+              Row(children: [
+                Expanded(child: TextField(controller: _sleepHoursController, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(labelText: 'Sleep hours', suffixText: 'h'))),
+                const SizedBox(width: 12),
+                Expanded(child: TextField(controller: _stepsController, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Steps'))),
+              ]),
               const SizedBox(height: 20),
               const Text('Notes', style: TextStyle(color: AppColors.text, fontSize: 17, fontWeight: FontWeight.w700)),
               const SizedBox(height: 10),

@@ -13,6 +13,8 @@ class CheckinRepository {
     required String mood,
     required int sleepQuality,
     required String notes,
+    double sleepHours = 7,
+    int activitySteps = 6000,
   }) async {
     final now = DateTime.now();
     final dayId = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
@@ -22,6 +24,8 @@ class CheckinRepository {
       'date': Timestamp.fromDate(now),
       'mood': mood,
       'sleepQuality': sleepQuality,
+      'sleepHours': sleepHours,
+      'activitySteps': activitySteps,
       'notes': notes.trim(),
       'source': 'manual_checkin',
       'updatedAt': FieldValue.serverTimestamp(),
@@ -31,12 +35,13 @@ class CheckinRepository {
   Future<void> saveHealthSummary({required String uid, required HealthSummary summary}) async {
     final now = DateTime.now();
     final dayId = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    await _firestore.collection('behavioral_data').doc(uid).collection('daily').doc(dayId).set({
+    final fields = <String, dynamic>{
       'date': Timestamp.fromDate(now),
-      'activitySteps': summary.steps,
-      'sleepHours': summary.sleepHours,
       'source': 'health_platform',
       'updatedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+      if (summary.steps > 0) 'activitySteps': summary.steps,
+      if (summary.sleepHours > 0) 'sleepHours': summary.sleepHours,
+    };
+    await _firestore.collection('behavioral_data').doc(uid).collection('daily').doc(dayId).set(fields, SetOptions(merge: true));
   }
 }

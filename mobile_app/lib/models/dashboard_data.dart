@@ -18,8 +18,8 @@ class BehavioralSummary {
   factory BehavioralSummary.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data() ?? <String, dynamic>{};
     return BehavioralSummary(
-      sleepHours: (data['sleepHours'] as num?)?.toDouble() ?? 0,
-      activitySteps: (data['activitySteps'] as num?)?.toInt() ?? 0,
+      sleepHours: (data['sleepHours'] as num?)?.toDouble() ?? 7,
+      activitySteps: (data['activitySteps'] as num?)?.toInt() ?? 6000,
       mood: data['mood'] as String? ?? 'Not recorded',
       alertCount: (data['alertCount'] as num?)?.toInt() ?? 0,
       riskScore: (data['riskScore'] as num?)?.toInt() ?? 0,
@@ -27,12 +27,24 @@ class BehavioralSummary {
   }
 
   static const empty = BehavioralSummary(
-    sleepHours: 0,
-    activitySteps: 0,
-    mood: 'Not recorded',
+    sleepHours: 7,
+    activitySteps: 6000,
+    mood: 'Good',
     alertCount: 0,
     riskScore: 0,
   );
+
+  /// Safe demo/default values shown until a real check-in or health reading
+  /// is available. They are replaced by Firestore values when a record exists.
+  static BehavioralSummary defaultsFor(String uid) {
+    const demo = <String, BehavioralSummary>{
+      'qdFEFeJt5eUFqdt0PDLpKksqJeB2': BehavioralSummary(sleepHours: 7, activitySteps: 7000, mood: 'Good', alertCount: 0, riskScore: 67),
+      'VSEORe4ar4g181mjflMFpea545X2': BehavioralSummary(sleepHours: 6.2, activitySteps: 5200, mood: 'Okay', alertCount: 0, riskScore: 54),
+      'xM9bMPZNwUSjSebZp0aMUIHWj3h1': BehavioralSummary(sleepHours: 7.8, activitySteps: 8200, mood: 'Good', alertCount: 0, riskScore: 31),
+      'pxQBwrhR7BRrQM4cVwwb2VrTIp12': BehavioralSummary(sleepHours: 5.4, activitySteps: 3100, mood: 'Low', alertCount: 1, riskScore: 78),
+    };
+    return demo[uid] ?? empty;
+  }
 }
 
 class PatientSummary {

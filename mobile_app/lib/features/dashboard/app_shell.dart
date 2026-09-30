@@ -64,7 +64,7 @@ class _PatientHomePage extends StatelessWidget {
   Widget build(BuildContext context) => StreamBuilder<UserProfile?>(stream: UserRepository().watchProfile(uid), builder: (context, profileSnapshot) {
     final displayName = profileSnapshot.data?.displayName ?? 'there';
     return StreamBuilder<BehavioralSummary>(stream: repository.watchPatientSummary(uid), builder: (context, snapshot) {
-    final summary = snapshot.data ?? BehavioralSummary.empty;
+    final summary = snapshot.data ?? BehavioralSummary.defaultsFor(uid);
     return StreamBuilder<RiskAssessment?>(stream: repository.watchRiskAssessment(uid), builder: (context, riskSnapshot) {
     final assessment = riskSnapshot.data;
     return ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 24), children: [
