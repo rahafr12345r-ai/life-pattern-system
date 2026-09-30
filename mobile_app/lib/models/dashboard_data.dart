@@ -36,18 +36,22 @@ class BehavioralSummary {
 }
 
 class PatientSummary {
-  const PatientSummary({required this.uid, required this.name, required this.status});
+  const PatientSummary({required this.uid, required this.name, required this.email, required this.status, this.studentId});
 
   final String uid;
   final String name;
+  final String email;
   final String status;
+  final String? studentId;
 
   factory PatientSummary.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data() ?? <String, dynamic>{};
     return PatientSummary(
       uid: doc.id,
       name: data['displayName'] as String? ?? data['email'] as String? ?? 'Unnamed patient',
+      email: data['email'] as String? ?? '',
       status: data['patientStatus'] as String? ?? 'Connected',
+      studentId: data['studentId'] as String?,
     );
   }
 }

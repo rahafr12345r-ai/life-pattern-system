@@ -9,7 +9,9 @@ import '../profile/profile_screen.dart';
 import '../reports/history_reports_screens.dart';
 import '../../models/dashboard_data.dart';
 import '../../models/risk_assessment.dart';
+import '../../models/user_profile.dart';
 import '../../repositories/dashboard_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({required this.role, required this.uid, super.key, this.dashboardRepository});
@@ -59,14 +61,16 @@ class _PatientHomePage extends StatelessWidget {
   final DashboardRepository repository;
   final String uid;
   @override
-  Widget build(BuildContext context) => StreamBuilder<BehavioralSummary>(stream: repository.watchPatientSummary(uid), builder: (context, snapshot) {
+  Widget build(BuildContext context) => StreamBuilder<UserProfile?>(stream: UserRepository().watchProfile(uid), builder: (context, profileSnapshot) {
+    final displayName = profileSnapshot.data?.displayName ?? 'there';
+    return StreamBuilder<BehavioralSummary>(stream: repository.watchPatientSummary(uid), builder: (context, snapshot) {
     final summary = snapshot.data ?? BehavioralSummary.empty;
     return StreamBuilder<RiskAssessment?>(stream: repository.watchRiskAssessment(uid), builder: (context, riskSnapshot) {
     final assessment = riskSnapshot.data;
     return ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 24), children: [
         const _Header(title: 'Home', subtitle: 'Your daily pattern summary'),
         const SizedBox(height: 22),
-        const Text('Hello, Rahaf', style: TextStyle(color: AppColors.text, fontSize: 22, fontWeight: FontWeight.w700)),
+        Text('Hello, $displayName', style: const TextStyle(color: AppColors.text, fontSize: 22, fontWeight: FontWeight.w700)),
         const SizedBox(height: 16),
         _ScoreCard(score: assessment?.score ?? summary.riskScore, level: assessment?.level),
         const SizedBox(height: 16),
@@ -143,7 +147,7 @@ class _DoctorPatientsPage extends StatelessWidget {
         else
           ...patients.map((patient) => _PatientRow(
                 name: patient.name,
-                status: patient.status,
+                status: '${patient.email}\n• ${patient.status}',
                 color: AppColors.primary,
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
                   builder: (_) => PatientConversationScreen(doctorId: doctorId, patientId: patient.uid, patientName: patient.name),

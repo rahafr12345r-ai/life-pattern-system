@@ -23,23 +23,23 @@ ThemeData buildAppTheme() {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.surface,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-      labelStyle: const TextStyle(color: AppColors.mutedText, fontSize: 13),
-      hintStyle: const TextStyle(color: AppColors.mutedText, fontSize: 14),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+      labelStyle: const TextStyle(color: AppColors.mutedText, fontSize: 14),
+      hintStyle: const TextStyle(color: AppColors.mutedText, fontSize: 16),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         borderSide: const BorderSide(color: AppColors.error),
       ),
     ),

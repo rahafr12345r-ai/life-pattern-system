@@ -17,7 +17,9 @@ class CheckinRepository {
     final now = DateTime.now();
     final dayId = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
     await _firestore.collection('behavioral_data').doc(uid).collection('daily').doc(dayId).set({
-      'date': FieldValue.serverTimestamp(),
+      // Use a client timestamp for immediate local rendering and keep the
+      // server timestamp separately for authoritative synchronization.
+      'date': Timestamp.fromDate(now),
       'mood': mood,
       'sleepQuality': sleepQuality,
       'notes': notes.trim(),
@@ -30,7 +32,7 @@ class CheckinRepository {
     final now = DateTime.now();
     final dayId = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
     await _firestore.collection('behavioral_data').doc(uid).collection('daily').doc(dayId).set({
-      'date': FieldValue.serverTimestamp(),
+      'date': Timestamp.fromDate(now),
       'activitySteps': summary.steps,
       'sleepHours': summary.sleepHours,
       'source': 'health_platform',

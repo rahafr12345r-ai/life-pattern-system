@@ -18,13 +18,15 @@ class UserRepository {
   Future<void> createProfile({
     required User user,
     required String role,
+    String? displayName,
   }) async {
     await _users.doc(user.uid).set({
       'email': user.email ?? '',
       'role': role,
       'consentAccepted': false,
       'createdAt': FieldValue.serverTimestamp(),
-      if (user.displayName != null) 'displayName': user.displayName,
+      if ((displayName ?? user.displayName)?.trim().isNotEmpty == true)
+        'displayName': (displayName ?? user.displayName)!.trim(),
     }, SetOptions(merge: true));
   }
 

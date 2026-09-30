@@ -100,7 +100,7 @@ class _SignInScreenState extends State<SignInScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 440),
               child: Form(
@@ -109,25 +109,28 @@ class _SignInScreenState extends State<SignInScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const LifePatternBrand(),
-                    const SizedBox(height: 42),
+                    const SizedBox(height: 48),
                     const Text(
-                      'Sign in',
+                      'Welcome back',
                       style: TextStyle(
                         color: AppColors.text,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 27,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       'Sign in to review your daily patterns',
-                      style: TextStyle(color: AppColors.mutedText, fontSize: 14),
+                      style: TextStyle(color: AppColors.mutedText, fontSize: 16),
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 32),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(labelText: 'Email'),
+                      decoration: const InputDecoration(
+                        hintText: 'Email address',
+                        prefixIcon: Icon(Icons.mail_outline),
+                      ),
                       validator: (value) {
                         if (value == null || !value.contains('@')) {
                           return 'Enter a valid email';
@@ -140,7 +143,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
-                        labelText: 'Password',
+                        hintText: 'Password',
+                        prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           onPressed: () => setState(
                             () => _obscurePassword = !_obscurePassword,
@@ -172,8 +176,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       onPressed: _isLoading ? null : _signIn,
                     ),
                     const SizedBox(height: 12),
-                    GoogleButton(onPressed: _isLoading ? null : _signInWithGoogle),
-                    const SizedBox(height: 22),
                     Center(
                       child: TextButton(
                         onPressed: _isLoading
@@ -185,6 +187,24 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                         child: const Text('Create a new account'),
                       ),
+                    ),
+                    const SizedBox(height: 22),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF3DD),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Text(
+                        '✓  Test access: rahaf.adil@lifepattern.com / Life1234',
+                        style: TextStyle(color: Color(0xFFE36D28), fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'This score describes behavioral changes only; it is not a medical diagnosis or treatment.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: AppColors.mutedText, fontSize: 13, height: 1.45),
                     ),
                   ],
                 ),

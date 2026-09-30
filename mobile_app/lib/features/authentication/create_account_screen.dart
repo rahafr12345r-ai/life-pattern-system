@@ -17,6 +17,7 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late final AuthService _authService;
@@ -35,6 +36,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -55,7 +57,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       );
       final user = credential.user;
       if (user != null) {
-        await _userRepository.createProfile(user: user, role: _accountType);
+        await _userRepository.createProfile(user: user, role: _accountType, displayName: _nameController.text);
       }
       if (mounted) Navigator.of(context).pop();
     } on FirebaseAuthException catch (error) {
@@ -77,7 +79,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       final credential = await _authService.signInWithGoogle();
       final user = credential.user;
       if (user != null) {
-        await _userRepository.createProfile(user: user, role: _accountType);
+        await _userRepository.createProfile(user: user, role: _accountType, displayName: _nameController.text);
       }
       if (mounted) Navigator.of(context).pop();
     } on FirebaseAuthException catch (error) {
@@ -138,6 +140,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       style: TextStyle(color: AppColors.mutedText, fontSize: 14),
                     ),
                     const SizedBox(height: 28),
+                    TextFormField(
+                      controller: _nameController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: const InputDecoration(labelText: 'Full name'),
+                      validator: (value) => value == null || value.trim().length < 3 ? 'Enter your full name' : null,
+                    ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,

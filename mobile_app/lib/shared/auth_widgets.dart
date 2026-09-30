@@ -3,40 +3,56 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
 class LifePatternBrand extends StatelessWidget {
-  const LifePatternBrand({super.key});
+  const LifePatternBrand({super.key, this.showLanguage = true});
+
+  final bool showLanguage;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        if (showLanguage)
+          Align(
+            alignment: AlignmentDirectional.topEnd,
+            child: TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                padding: EdgeInsets.zero,
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: const Text('العربية', style: TextStyle(fontWeight: FontWeight.w700)),
+            ),
+          ),
+        if (showLanguage) const SizedBox(height: 22),
         Container(
-          width: 48,
-          height: 48,
+          width: 74,
+          height: 74,
           decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.1),
-            shape: BoxShape.circle,
+            color: AppColors.primary.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(28),
           ),
           child: const Icon(
             Icons.favorite_border_rounded,
             color: AppColors.primary,
-            size: 26,
+            size: 43,
           ),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
         const Text(
           'Life Pattern',
           style: TextStyle(
             color: AppColors.primary,
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.5,
+            fontSize: 28,
+            fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 10),
         const Text(
           'Early behavioral insights, with clarity and privacy',
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.mutedText, fontSize: 12),
+          style: TextStyle(color: AppColors.mutedText, fontSize: 15),
         ),
       ],
     );
@@ -60,12 +76,12 @@ class PrimaryButton extends StatelessWidget {
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
           ),
         ),
         child: Text(
           label,
-          style: const TextStyle(fontWeight: FontWeight.w700),
+          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
         ),
       ),
     );
