@@ -1,0 +1,27 @@
+name: Daily behavioral analysis
+
+on:
+  schedule:
+    # 03:00 UTC every day (06:00 Arabia Standard Time)
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-daily-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger the protected Render endpoint
+        env:
+          ANALYSIS_KEY: ${{ secrets.LIFE_PATTERN_ANALYSIS_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$ANALYSIS_KEY"
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "x-analysis-key: $ANALYSIS_KEY" \
+            --header "accept: application/json" \
+            https://life-pattern-api.onrender.com/v1/jobs/daily-analysis
