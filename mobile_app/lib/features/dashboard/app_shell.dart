@@ -86,6 +86,7 @@ class _PatientHomePage extends StatelessWidget {
       ]);
     });
   });
+  });
 }
 
 class _ScoreCard extends StatelessWidget {

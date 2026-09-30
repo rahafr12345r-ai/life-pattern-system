@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
-import '../../repositories/user_repository.dart';
 import '../../services/auth_service.dart';
 import '../../shared/auth_widgets.dart';
 import 'create_account_screen.dart';
@@ -21,7 +20,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late final AuthService _authService;
-  late final UserRepository _userRepository;
   bool _isLoading = false;
   bool _obscurePassword = true;
   String? _errorMessage;
@@ -30,7 +28,6 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     super.initState();
     _authService = widget.authService ?? AuthService();
-    _userRepository = UserRepository();
   }
 
   @override
@@ -47,17 +44,6 @@ class _SignInScreenState extends State<SignInScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-    });
-  }
-
-  Future<void> _signInWithGoogle() async {
-    await _runAuth(() async {
-      final credential = await _authService.signInWithGoogle();
-      final user = credential.user;
-      if (user != null) {
-        await _userRepository.createProfile(user: user, role: 'Patient');
-      }
-      return credential;
     });
   }
 

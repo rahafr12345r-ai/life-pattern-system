@@ -7,7 +7,8 @@ void main() {
   testWidgets('Life Pattern app starts at sign in', (WidgetTester tester) async {
     await tester.pumpWidget(const MaterialApp(home: SignInScreen()));
 
-    expect(find.text('Sign in'), findsNWidgets(2));
+    expect(find.text('Welcome back'), findsOneWidget);
+    expect(find.text('Sign in'), findsOneWidget);
     expect(find.text('Create a new account'), findsOneWidget);
   });
 }
